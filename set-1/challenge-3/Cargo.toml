@@ -1,0 +1,7 @@
+[package]
+name = "challenge-3"
+version = "0.1.0"
+authors = ["Corey Farwell <coreyf@rwell.org>"]
+
+[dependencies]
+data-encoding = "1.1"
