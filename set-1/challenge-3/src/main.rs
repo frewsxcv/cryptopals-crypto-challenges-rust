@@ -36,6 +36,7 @@ fn byte_freq_score(c: u8) -> f32 {
         b'x' => 0.150,
         b'y' => 1.974,
         b'z' => 0.074,
+        b @ b'A'...b'Z' => byte_freq_score(b - b'A' + b'a'),
         b' ' => 0.,
         _ => -10.,
     }
