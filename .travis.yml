@@ -1,0 +1,3 @@
+language: rust
+rust: nightly
+script: for d in $(find set* -name "Cargo.toml"); do (cd $(dirname $d) && cargo run); done
