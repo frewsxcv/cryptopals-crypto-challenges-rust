@@ -5,3 +5,4 @@ authors = ["Corey Farwell <coreyf@rwell.org>"]
 
 [dependencies]
 data-encoding = "1.1"
+utils = {"path" = "../../utils"}
