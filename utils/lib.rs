@@ -35,9 +35,39 @@ pub fn byte_freq_score(c: u8) -> f32 {
     }
 }
 
-pub fn bytestring_xor(dest: &mut [u8], src: &[u8], xor: u8) {
-    for (i, b) in src.iter().enumerate() {
-        dest[i] = b ^ xor;
+pub trait BytesExt {
+    /// Assumes |self| is ASCII bytes and outputs a String.
+    fn ascii_to_string(&self) -> String;
+
+    /// XOR all bytes of |self| with |byte|.
+    fn xor_byte(&self, byte: u8, dest: &mut [u8]);
+
+    /// XOR all bytes of |self| with |other|. Panics if lengths differ.
+    fn xor_bytes(&self, other: &[u8], dest: &mut [u8]);
+}
+
+impl BytesExt for [u8] {
+    fn ascii_to_string(&self) -> String {
+        self.iter()
+            .map(|b| *b as char)
+            .collect::<String>()
+    }
+
+    fn xor_byte(&self, byte: u8, dest: &mut [u8]) {
+        for (i, b) in self.iter().enumerate() {
+            dest[i] = b ^ byte;
+        }
+    }
+
+    fn xor_bytes(&self, other: &[u8], dest: &mut [u8]) {
+        assert_eq!(self.len(), other.len());
+        assert!(dest.len() >= self.len());
+        let xor_iter = self.iter()
+                           .zip(other.iter())
+                           .map(|(b1, b2)| b1 ^ b2);
+        for (i, xor) in xor_iter.enumerate() {
+            dest[i] = xor;
+        }
     }
 }
 
@@ -45,21 +75,4 @@ pub fn bytestring_score(bytes: &[u8]) -> f32 {
     bytes.iter()
          .map(|b| byte_freq_score(*b))
          .sum()
-}
-
-pub fn bytestring_to_string(bytes: &[u8]) -> String {
-    bytes.iter()
-         .map(|b| *b as char)
-         .collect::<String>()
-}
-
-pub fn xor_bytestrings(dest: &mut [u8], src1: &[u8], src2: &[u8]) {
-    assert_eq!(src1.len(), src2.len());
-    assert!(dest.len() >= src1.len());
-    let xor_iter = src1.iter()
-                       .zip(src2.iter())
-                       .map(|(b1, b2)| b1 ^ b2);
-    for (i, xor) in xor_iter.enumerate() {
-        dest[i] = xor;
-    }
 }
