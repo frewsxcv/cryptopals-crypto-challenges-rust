@@ -1,8 +1,9 @@
 [package]
-name = "challenge-5"
+name = "challenge-6"
 version = "0.1.0"
 authors = ["Corey Farwell <coreyf@rwell.org>"]
 
 [dependencies]
-data-encoding = "1.1"
 utils = {"path" = "../../utils"}
+data-encoding = "1.1"
+hamming = "0.1.2"

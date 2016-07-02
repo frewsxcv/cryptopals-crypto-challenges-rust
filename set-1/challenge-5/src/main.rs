@@ -1,6 +1,8 @@
 extern crate data_encoding;
+extern crate utils;
 
 use data_encoding::hex;
+use utils::BytesExt;
 
 const INPUT: &'static [u8] =
     b"Burning 'em, if you ain't quick and nimble\n\
@@ -11,10 +13,8 @@ const EXPECTED_HEX: &'static [u8] =
       A282B2F20430A652E2C652A3124333A653E2B2027630C692B20283165286326302E27282F";
 
 fn main() {
-    let result = INPUT.iter()
-                      .zip(XOR_KEY.iter().cycle())
-                      .map(|(input, key)| input ^ key)
-                      .collect::<Vec<_>>();
-    let result_hex = hex::encode(&result);
+    let mut result_xor = vec![0; INPUT.len()];
+    INPUT.xor_repeating_key(&XOR_KEY, &mut result_xor);
+    let result_hex = hex::encode(&result_xor);
     assert_eq!(result_hex.as_bytes(), EXPECTED_HEX);
 }
