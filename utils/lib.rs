@@ -45,6 +45,9 @@ pub trait BytesExt {
     /// XOR all bytes of |self| with |other|. Panics if lengths differ.
     fn xor_bytes(&self, other: &[u8], dest: &mut [u8]);
 
+    /// XOR all bytes with the repeating key |key|.
+    fn xor_repeating_key(&self, key: &[u8], dest: &mut [u8]);
+
     /// Calculate the likelihood that |self| is an ASCII English
     /// word/phrase/sentence.
     fn english_score(&self) -> f32;
@@ -69,6 +72,15 @@ impl BytesExt for [u8] {
         let xor_iter = self.iter()
                            .zip(other.iter())
                            .map(|(b1, b2)| b1 ^ b2);
+        for (i, xor) in xor_iter.enumerate() {
+            dest[i] = xor;
+        }
+    }
+
+    fn xor_repeating_key(&self, key: &[u8], dest: &mut [u8]) {
+        let xor_iter = self.iter()
+                           .zip(key.iter().cycle())
+                           .map(|(input, key)| input ^ key);
         for (i, xor) in xor_iter.enumerate() {
             dest[i] = xor;
         }
