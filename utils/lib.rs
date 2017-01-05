@@ -1,5 +1,3 @@
-#![feature(iter_arith)]
-
 // https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language
 fn byte_freq_score(c: u8) -> f32 {
     match c {
