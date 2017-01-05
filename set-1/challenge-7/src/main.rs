@@ -1,25 +1,14 @@
 extern crate crypto;
-extern crate data_encoding;
+extern crate utils;
 
 use crypto::aes;
-use crypto::buffer::{ReadBuffer, WriteBuffer};
-use data_encoding::base64;
-
-use std::io::Read;
-use std::fs::File;
 
 static KEY: &'static [u8] = b"YELLOW SUBMARINE";
 static INPUT_FILENAME: &'static str = "input.txt";
 
 fn main() {
-    let mut input_file = File::open(INPUT_FILENAME).unwrap();
-    let mut input_file_bytes = Vec::new();
-    input_file.read_to_end(&mut input_file_bytes).unwrap();
-    let input_file_bytes = input_file_bytes.into_iter()
-        .filter(|i| !(*i as char).is_whitespace())
-        .collect::<Vec<_>>();
-    let input_file_bytes = base64::decode(&input_file_bytes)
-        .expect("could not base64 decode input file");
+    let input_file_bytes = utils::read_base64_file(INPUT_FILENAME)
+        .expect("could not read base64 file");
     let mut decryptor =
         aes::ecb_decryptor(aes::KeySize::KeySize128, KEY, crypto::blockmodes::NoPadding);
 

@@ -5,3 +5,6 @@ authors = ["Corey Farwell <coreyf@rwell.org>"]
 
 [lib]
 path = "lib.rs"
+
+[dependencies]
+data-encoding = "1.1"

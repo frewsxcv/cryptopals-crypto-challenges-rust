@@ -5,4 +5,4 @@ authors = ["Corey Farwell <coreyf@rwell.org>"]
 
 [dependencies]
 rust-crypto = "0.2"
-data-encoding = "1.1"
+utils = {"path" = "../../utils"}
