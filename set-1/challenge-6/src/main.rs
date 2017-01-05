@@ -1,11 +1,7 @@
-extern crate data_encoding;
 extern crate hamming;
 extern crate utils;
 
-use std::fs::File;
-use std::io::Read;
 use utils::BytesExt;
-use data_encoding::base64;
 
 
 static INPUT_FILENAME: &'static str = "input.txt";
@@ -69,15 +65,8 @@ fn find_best_key_at_keysize(input: &[u8], keysize: usize) -> (Vec<u8>, f32) {
 }
 
 fn main() {
-    let mut input_file = File::open(INPUT_FILENAME).unwrap();
-    let mut input = Vec::new();
-    input_file.read_to_end(&mut input).unwrap();
-
-    let input = input.into_iter()
-                     .filter(|i| !(i.clone() as char).is_whitespace())
-                     .collect::<Vec<_>>();
-
-    let input = base64::decode(&input).unwrap();
+    let input = utils::read_base64_file(INPUT_FILENAME)
+        .expect("could not read base64 file");
 
     let keysizes = likely_keysizes(&input);
 

@@ -1,4 +1,11 @@
-#![feature(iter_arith)]
+extern crate data_encoding;
+
+use std::error::Error;
+use std::io::Read;
+use std::fs::File;
+use std::path::Path;
+
+use data_encoding::base64;
 
 // https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language
 fn byte_freq_score(c: u8) -> f32 {
@@ -91,4 +98,14 @@ impl BytesExt for [u8] {
             .map(|b| byte_freq_score(*b))
             .sum()
     }
+}
+
+pub fn read_base64_file<P: AsRef<Path>>(file_path: P) -> Result<Vec<u8>, Box<Error>> {
+    let mut input_file = File::open(file_path.as_ref())?;
+    let mut input_file_bytes = Vec::new();
+    input_file.read_to_end(&mut input_file_bytes)?;
+    let input_file_bytes = input_file_bytes.into_iter()
+        .filter(|i| !(*i as char).is_whitespace())
+        .collect::<Vec<_>>();
+    Ok(base64::decode(&input_file_bytes)?)
 }

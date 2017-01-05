@@ -1,10 +1,8 @@
 [package]
-name = "utils"
+name = "challenge-7"
 version = "0.1.0"
 authors = ["Corey Farwell <coreyf@rwell.org>"]
 
-[lib]
-path = "lib.rs"
-
 [dependencies]
-data-encoding = "1.1"
+rust-crypto = "0.2"
+utils = {"path" = "../../utils"}
