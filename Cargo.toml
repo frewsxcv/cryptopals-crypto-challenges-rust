@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "set-1/challenge-1",
+  "set-1/challenge-2",
+  "set-1/challenge-3",
+  "set-1/challenge-4",
+  "set-1/challenge-5",
+  "set-1/challenge-6",
+  "set-1/challenge-7",
+]
