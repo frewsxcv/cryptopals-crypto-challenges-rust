@@ -1,23 +1,13 @@
-extern crate data_encoding;
 extern crate utils;
 
-use data_encoding::hex;
-use std::ascii::AsciiExt;
-use std::fs::File;
-use std::io::Read;
-use utils::BytesExt;
+use utils::{BytesExt, read_hex_lines_from_file};
 
 
 static INPUT_FILENAME: &'static str = "input.txt";
 
 fn main() {
-    let mut input_file = File::open(INPUT_FILENAME).unwrap();
-    let mut input_string = String::new();
-    input_file.read_to_string(&mut input_string).unwrap();
     let mut best = (0f32, 0u8, String::new());
-    for line in input_string.lines() {
-        let upper_line = line.as_bytes().to_ascii_uppercase();
-        let line_bytes = hex::decode(&upper_line).unwrap();
+    for line_bytes in read_hex_lines_from_file(INPUT_FILENAME) {
         let mut input_xor = vec![0; line_bytes.len()];
         for i in 0..255 {
             line_bytes.xor_byte(i, &mut input_xor);
