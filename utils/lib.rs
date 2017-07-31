@@ -111,6 +111,13 @@ pub fn read_base64_file<P: AsRef<Path>>(file_path: P) -> Result<Vec<u8>, Box<Err
     Ok(base64::decode(&input_file_bytes)?)
 }
 
+pub fn read_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<String> {
+    let mut input_file = File::open(file_path).unwrap();
+    let mut input_string = String::new();
+    input_file.read_to_string(&mut input_string).unwrap();
+    input_string.lines().map(ToOwned::to_owned).collect::<Vec<_>>()
+}
+
 pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
     let mut input_file = File::open(file_path).unwrap();
     let mut input_string = String::new();
