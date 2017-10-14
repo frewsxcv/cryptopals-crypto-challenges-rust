@@ -4,7 +4,7 @@ extern crate utils;
 use utils::BytesExt;
 
 
-static INPUT_FILENAME: &'static str = "input.txt";
+static INPUT_FILENAME: &str = "input.txt";
 
 fn likely_keysizes(input: &[u8]) -> Vec<usize> {
     #[derive(Debug)]

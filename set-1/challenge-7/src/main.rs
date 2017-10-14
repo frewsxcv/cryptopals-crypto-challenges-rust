@@ -3,8 +3,8 @@ extern crate utils;
 
 use crypto::aes;
 
-static KEY: &'static [u8] = b"YELLOW SUBMARINE";
-static INPUT_FILENAME: &'static str = "input.txt";
+static KEY: &[u8] = b"YELLOW SUBMARINE";
+static INPUT_FILENAME: &str = "input.txt";
 
 fn main() {
     let input_file_bytes = utils::read_base64_file(INPUT_FILENAME)

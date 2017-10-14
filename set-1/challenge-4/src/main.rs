@@ -3,7 +3,7 @@ extern crate utils;
 use utils::{BytesExt, read_hex_lines_from_file};
 
 
-static INPUT_FILENAME: &'static str = "input.txt";
+static INPUT_FILENAME: &str = "input.txt";
 
 fn main() {
     let mut best = (0f32, 0u8, String::new());
