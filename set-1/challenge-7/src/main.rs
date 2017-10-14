@@ -1,31 +1,36 @@
-extern crate crypto;
+extern crate openssl;
 extern crate utils;
 
-use crypto::aes;
+use openssl::symm;
+use std::io::Read;
+use std::fs;
 
 static KEY: &[u8] = b"YELLOW SUBMARINE";
 static INPUT_FILENAME: &str = "input.txt";
+static SOLUTION_FILENAME: &str = "solution.txt";
 
 fn main() {
     let input_file_bytes = utils::read_base64_file(INPUT_FILENAME)
         .expect("could not read base64 file");
-    let mut decryptor =
-        aes::ecb_decryptor(aes::KeySize::KeySize128, KEY, crypto::blockmodes::NoPadding);
+    let cipher = symm::Cipher::aes_128_ecb();
+    let mut decryptor = symm::Crypter::new(
+        cipher,
+        symm::Mode::Decrypt,
+        KEY,
+        None,
+    ).unwrap();
+    decryptor.pad(false);
 
-    let mut input_buffer = crypto::buffer::RefReadBuffer::new(&input_file_bytes);
-    let mut output_bytes = vec![9; input_file_bytes.len()];
+    let mut output_bytes = vec![0; input_file_bytes.len() + cipher.block_size()];
+    let count1 = decryptor.update(&input_file_bytes, &mut output_bytes).unwrap();
+    let count2 = decryptor.finalize(&mut output_bytes).unwrap();
+    output_bytes.truncate(count1 + count2);
+    assert_eq!(output_bytes, solution());
+}
 
-    {
-        let mut output_buffer = crypto::buffer::RefWriteBuffer::new(&mut output_bytes);
-        let result = decryptor.decrypt(&mut input_buffer, &mut output_buffer, true)
-            .expect("AES decrypt failed");
-        match result {
-            crypto::buffer::BufferResult::BufferUnderflow => (),
-            crypto::buffer::BufferResult::BufferOverflow => panic!("output buffer overflow"),
-        }
-    }
-
-    let s = String::from_utf8(output_bytes).expect("invalid utf8 string");
-
-    println!("{}", s);
+fn solution() -> Vec<u8> {
+    let mut bytes = vec![];
+    let mut file = fs::File::open(SOLUTION_FILENAME).unwrap();
+    file.read_to_end(&mut bytes).unwrap();
+    bytes
 }
