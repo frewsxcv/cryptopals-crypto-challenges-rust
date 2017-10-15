@@ -1,0 +1,8 @@
+[package]
+name = "challenge-10"
+version = "0.1.0"
+authors = ["Corey Farwell <coreyf@rwell.org>"]
+
+[dependencies]
+openssl = "0.9"
+utils = {"path" = "../../utils"}
