@@ -53,6 +53,9 @@ pub trait BytesExt {
     /// XOR all bytes of |self| with |other|. Panics if lengths differ.
     fn xor_bytes(&self, other: &[u8], dest: &mut [u8]);
 
+    /// XOR all bytes of |self| with |other|. Panics if lengths differ.
+    fn xor_bytes_inplace(&mut self, other: &[u8]);
+
     /// XOR all bytes with the repeating key |key|.
     fn xor_repeating_key(&self, key: &[u8], dest: &mut [u8]);
 
@@ -78,6 +81,13 @@ impl BytesExt for [u8] {
         let xor_iter = self.iter().zip(other.iter()).map(|(b1, b2)| b1 ^ b2);
         for (i, xor) in xor_iter.enumerate() {
             dest[i] = xor;
+        }
+    }
+
+    fn xor_bytes_inplace(&mut self, other: &[u8]) {
+        assert_eq!(self.len(), other.len());
+        for i in 0..self.len() {
+            self[i] ^= other[i];
         }
     }
 
