@@ -152,17 +152,17 @@ pub mod aes_128_ecb {
         common(ciphertext, key, symm::Mode::Decrypt)
     }
 
-    fn common(ciphertext: &[u8], key: &[u8], mode: symm::Mode) -> Vec<u8> {
+    fn common(in_: &[u8], key: &[u8], mode: symm::Mode) -> Vec<u8> {
         let cipher = symm::Cipher::aes_128_ecb();
-        let mut decryptor = symm::Crypter::new(cipher, mode, key, None).unwrap();
-        decryptor.pad(false);
+        let mut crypter = symm::Crypter::new(cipher, mode, key, None).unwrap();
+        crypter.pad(false);
 
-        let mut cleartext = vec![0; ciphertext.len() + cipher.block_size()];
-        let count1 = decryptor
-            .update(&ciphertext, &mut cleartext)
+        let mut out = vec![0; in_.len() + cipher.block_size()];
+        let count1 = crypter
+            .update(&in_, &mut out)
             .unwrap();
-        let count2 = decryptor.finalize(&mut cleartext).unwrap();
-        cleartext.truncate(count1 + count2);
-        cleartext
+        let count2 = crypter.finalize(&mut out).unwrap();
+        out.truncate(count1 + count2);
+        out
     }
 }
