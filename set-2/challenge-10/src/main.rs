@@ -10,8 +10,8 @@ static INPUT_FILENAME: &str = "input.txt";
 static SOLUTION_FILENAME: &str = "solution.txt";
 
 fn main() {
-    let input_file_bytes = utils::read_base64_file(INPUT_FILENAME)
-        .expect("could not read base64 file");
+    let input_file_bytes =
+        utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
     let cipher = symm::Cipher::aes_128_cbc();
     let mut decryptor = symm::Crypter::new(
         cipher,
@@ -22,7 +22,9 @@ fn main() {
     decryptor.pad(false);
 
     let mut output_bytes = vec![0; input_file_bytes.len() + cipher.block_size()];
-    let count1 = decryptor.update(&input_file_bytes, &mut output_bytes).unwrap();
+    let count1 = decryptor
+        .update(&input_file_bytes, &mut output_bytes)
+        .unwrap();
     let count2 = decryptor.finalize(&mut output_bytes).unwrap();
     output_bytes.truncate(count1 + count2);
     assert_eq!(output_bytes, solution());

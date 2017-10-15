@@ -24,9 +24,7 @@ fn likely_keysizes(input: &[u8]) -> Vec<usize> {
         });
     }
     results.sort_by(|a, b| a.distance.partial_cmp(&b.distance).unwrap());
-    results.into_iter()
-           .map(|result| result.keysize)
-           .collect()
+    results.into_iter().map(|result| result.keysize).collect()
 }
 
 /// Returns key and normalized score
@@ -65,8 +63,7 @@ fn find_best_key_at_keysize(input: &[u8], keysize: usize) -> (Vec<u8>, f32) {
 }
 
 fn main() {
-    let input = utils::read_base64_file(INPUT_FILENAME)
-        .expect("could not read base64 file");
+    let input = utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
 
     let keysizes = likely_keysizes(&input);
 

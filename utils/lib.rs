@@ -63,9 +63,7 @@ pub trait BytesExt {
 
 impl BytesExt for [u8] {
     fn ascii_to_string(&self) -> String {
-        self.iter()
-            .map(|b| *b as char)
-            .collect::<String>()
+        self.iter().map(|b| *b as char).collect::<String>()
     }
 
     fn xor_byte(&self, byte: u8, dest: &mut [u8]) {
@@ -77,27 +75,23 @@ impl BytesExt for [u8] {
     fn xor_bytes(&self, other: &[u8], dest: &mut [u8]) {
         assert_eq!(self.len(), other.len());
         assert!(dest.len() >= self.len());
-        let xor_iter = self.iter()
-                           .zip(other.iter())
-                           .map(|(b1, b2)| b1 ^ b2);
+        let xor_iter = self.iter().zip(other.iter()).map(|(b1, b2)| b1 ^ b2);
         for (i, xor) in xor_iter.enumerate() {
             dest[i] = xor;
         }
     }
 
     fn xor_repeating_key(&self, key: &[u8], dest: &mut [u8]) {
-        let xor_iter = self.iter()
-                           .zip(key.iter().cycle())
-                           .map(|(input, key)| input ^ key);
+        let xor_iter = self.iter().zip(key.iter().cycle()).map(|(input, key)| {
+            input ^ key
+        });
         for (i, xor) in xor_iter.enumerate() {
             dest[i] = xor;
         }
     }
 
     fn english_score(&self) -> f32 {
-        self.iter()
-            .map(|b| byte_freq_score(*b))
-            .sum()
+        self.iter().map(|b| byte_freq_score(*b)).sum()
     }
 }
 
@@ -105,7 +99,8 @@ pub fn read_base64_file<P: AsRef<Path>>(file_path: P) -> Result<Vec<u8>, Box<Err
     let mut input_file = File::open(file_path.as_ref())?;
     let mut input_file_bytes = Vec::new();
     input_file.read_to_end(&mut input_file_bytes)?;
-    let input_file_bytes = input_file_bytes.into_iter()
+    let input_file_bytes = input_file_bytes
+        .into_iter()
         .filter(|i| !(*i as char).is_whitespace())
         .collect::<Vec<_>>();
     Ok(base64::decode(&input_file_bytes)?)
@@ -115,16 +110,22 @@ pub fn read_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<String> {
     let mut input_file = File::open(file_path).unwrap();
     let mut input_string = String::new();
     input_file.read_to_string(&mut input_string).unwrap();
-    input_string.lines().map(ToOwned::to_owned).collect::<Vec<_>>()
+    input_string
+        .lines()
+        .map(ToOwned::to_owned)
+        .collect::<Vec<_>>()
 }
 
 pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
     let mut input_file = File::open(file_path).unwrap();
     let mut input_string = String::new();
     input_file.read_to_string(&mut input_string).unwrap();
-    input_string.lines()
+    input_string
+        .lines()
         .map(|str_| str_.as_bytes())
         .map(|bytes| bytes.to_ascii_uppercase())
-        .map(|bytes| hex::decode(&bytes).expect("encountered invalid hex"))
+        .map(|bytes| {
+            hex::decode(&bytes).expect("encountered invalid hex")
+        })
         .collect::<Vec<_>>()
 }

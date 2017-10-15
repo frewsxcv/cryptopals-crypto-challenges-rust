@@ -4,8 +4,7 @@ extern crate utils;
 use data_encoding::hex;
 use utils::BytesExt;
 
-const INPUT: &[u8] =
-    b"Burning 'em, if you ain't quick and nimble\n\
+const INPUT: &[u8] = b"Burning 'em, if you ain't quick and nimble\n\
       I go crazy when I hear a cymbal";
 const XOR_KEY: [u8; 3] = [b'I', b'C', b'E'];
 const EXPECTED_HEX: &[u8] =
