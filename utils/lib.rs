@@ -1,4 +1,5 @@
 extern crate data_encoding;
+extern crate openssl;
 
 use std::ascii::AsciiExt;
 use std::error::Error;
@@ -138,4 +139,30 @@ pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
             hex::decode(&bytes).expect("encountered invalid hex")
         })
         .collect::<Vec<_>>()
+}
+
+pub mod aes_128_ecb {
+    use openssl::symm;
+
+    pub fn encrypt(ciphertext: &[u8], key: &[u8]) -> Vec<u8> {
+        common(ciphertext, key, symm::Mode::Encrypt)
+    }
+
+    pub fn decrypt(ciphertext: &[u8], key: &[u8]) -> Vec<u8> {
+        common(ciphertext, key, symm::Mode::Decrypt)
+    }
+
+    fn common(ciphertext: &[u8], key: &[u8], mode: symm::Mode) -> Vec<u8> {
+        let cipher = symm::Cipher::aes_128_ecb();
+        let mut decryptor = symm::Crypter::new(cipher, mode, key, None).unwrap();
+        decryptor.pad(false);
+
+        let mut cleartext = vec![0; ciphertext.len() + cipher.block_size()];
+        let count1 = decryptor
+            .update(&ciphertext, &mut cleartext)
+            .unwrap();
+        let count2 = decryptor.finalize(&mut cleartext).unwrap();
+        cleartext.truncate(count1 + count2);
+        cleartext
+    }
 }

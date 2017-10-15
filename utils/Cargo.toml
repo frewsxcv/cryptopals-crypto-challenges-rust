@@ -8,3 +8,4 @@ path = "lib.rs"
 
 [dependencies]
 data-encoding = "1.1"
+openssl = "0.9"

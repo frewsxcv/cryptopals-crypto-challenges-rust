@@ -1,7 +1,5 @@
-extern crate openssl;
 extern crate utils;
 
-use openssl::symm;
 use std::io::Read;
 use std::fs;
 
@@ -10,19 +8,8 @@ static INPUT_FILENAME: &str = "input.txt";
 static SOLUTION_FILENAME: &str = "solution.txt";
 
 fn main() {
-    let input_file_bytes =
-        utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
-    let cipher = symm::Cipher::aes_128_ecb();
-    let mut decryptor = symm::Crypter::new(cipher, symm::Mode::Decrypt, KEY, None).unwrap();
-    decryptor.pad(false);
-
-    let mut output_bytes = vec![0; input_file_bytes.len() + cipher.block_size()];
-    let count1 = decryptor
-        .update(&input_file_bytes, &mut output_bytes)
-        .unwrap();
-    let count2 = decryptor.finalize(&mut output_bytes).unwrap();
-    output_bytes.truncate(count1 + count2);
-    assert_eq!(output_bytes, solution());
+    let ciphertext = utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
+    assert_eq!(utils::aes_128_ecb::decrypt(&ciphertext, KEY), solution());
 }
 
 fn solution() -> Vec<u8> {
