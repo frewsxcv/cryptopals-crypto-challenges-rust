@@ -166,3 +166,33 @@ pub mod aes_128_ecb {
         out
     }
 }
+
+pub mod aes_128_cbc {
+    use openssl::symm;
+    use super::BytesExt;
+
+    pub const BLOCK_SIZE: usize = 128 / 8;
+
+    pub fn encrypt(ciphertext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
+        unimplemented!()
+    }
+
+    pub fn decrypt(ciphertext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
+        let cipher = symm::Cipher::aes_128_ecb();
+        let mut crypter = symm::Crypter::new(cipher, symm::Mode::Decrypt, key, None).unwrap();
+        crypter.pad(false);
+        let mut plaintext: Vec<u8> = vec![];
+        let mut prev_ciphertext_block = &vec![0; BLOCK_SIZE][..]; // Initial value is the IV
+        let mut decrypted_buf = vec![0; 2 * BLOCK_SIZE];
+        for ciphertext_block in ciphertext.chunks(BLOCK_SIZE) {
+            let count1 = crypter
+                .update(&ciphertext_block, &mut decrypted_buf)
+                .unwrap();
+            let count2 = crypter.finalize(&mut decrypted_buf).unwrap();
+            decrypted_buf[..count1 + count2].xor_bytes_inplace(&prev_ciphertext_block);
+            prev_ciphertext_block = ciphertext_block;
+            plaintext.extend(&decrypted_buf[..count1 + count2]);
+        }
+        plaintext
+    }
+}
