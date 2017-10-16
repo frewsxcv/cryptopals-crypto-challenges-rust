@@ -8,8 +8,7 @@ static INPUT_FILENAME: &str = "input.txt";
 static SOLUTION_FILENAME: &str = "solution.txt";
 
 fn main() {
-    let ciphertext =
-        utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
+    let ciphertext = utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
     let iv = [0; utils::aes_128_cbc::BLOCK_SIZE];
 
     // Ensure we can decrypt the supplied input file

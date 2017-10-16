@@ -158,9 +158,7 @@ pub mod aes_128_ecb {
         crypter.pad(false);
 
         let mut out = vec![0; in_.len() + cipher.block_size()];
-        let count1 = crypter
-            .update(&in_, &mut out)
-            .unwrap();
+        let count1 = crypter.update(&in_, &mut out).unwrap();
         let count2 = crypter.finalize(&mut out).unwrap();
         out.truncate(count1 + count2);
         out
