@@ -10,9 +10,15 @@ static SOLUTION_FILENAME: &str = "solution.txt";
 fn main() {
     let ciphertext =
         utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
-    let iv = &[0; utils::aes_128_cbc::BLOCK_SIZE][..];
-    let cleartext = utils::aes_128_cbc::decrypt(&ciphertext, KEY, iv);
+    let iv = [0; utils::aes_128_cbc::BLOCK_SIZE];
+
+    // Ensure we can decrypt the supplied input file
+    let cleartext = utils::aes_128_cbc::decrypt(&ciphertext, KEY, &iv[..]);
     assert_eq!(cleartext, solution());
+
+    // Ensure our encryption algorithm works by encrypting and confirming it matches the original
+    let ciphertext2 = utils::aes_128_cbc::encrypt(&cleartext, KEY, &iv);
+    assert_eq!(ciphertext, ciphertext2);
 }
 
 fn solution() -> Vec<u8> {

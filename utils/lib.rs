@@ -173,8 +173,26 @@ pub mod aes_128_cbc {
 
     pub const BLOCK_SIZE: usize = 128 / 8;
 
-    pub fn encrypt(ciphertext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
-        unimplemented!()
+    pub fn encrypt(plaintext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
+        let cipher = symm::Cipher::aes_128_ecb();
+        let mut crypter = symm::Crypter::new(cipher, symm::Mode::Encrypt, key, None).unwrap();
+        crypter.pad(false);
+        let mut ciphertext: Vec<u8> = vec![];
+
+        let mut prev_ciphertext_block = [0; BLOCK_SIZE];
+        prev_ciphertext_block.copy_from_slice(iv); // Initial value is the IV
+
+        let mut encrypted_buf = &mut [0; 2 * BLOCK_SIZE][..];
+        for plaintext_block in plaintext.chunks(BLOCK_SIZE) {
+            prev_ciphertext_block.xor_bytes_inplace(plaintext_block);
+            let count1 = crypter
+                .update(&prev_ciphertext_block, &mut encrypted_buf)
+                .unwrap();
+            let count2 = crypter.finalize(&mut encrypted_buf).unwrap();
+            ciphertext.extend(&encrypted_buf[..count1 + count2]);
+            prev_ciphertext_block.copy_from_slice(&encrypted_buf[..count1 + count2]);
+        }
+        ciphertext
     }
 
     pub fn decrypt(ciphertext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
