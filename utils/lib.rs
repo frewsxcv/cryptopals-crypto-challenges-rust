@@ -182,8 +182,8 @@ pub mod aes_128_cbc {
         let mut crypter = symm::Crypter::new(cipher, symm::Mode::Decrypt, key, None).unwrap();
         crypter.pad(false);
         let mut plaintext: Vec<u8> = vec![];
-        let mut prev_ciphertext_block = &vec![0; BLOCK_SIZE][..]; // Initial value is the IV
-        let mut decrypted_buf = vec![0; 2 * BLOCK_SIZE];
+        let mut prev_ciphertext_block = iv; // Initial value is the IV
+        let mut decrypted_buf = &mut [0; 2 * BLOCK_SIZE][..];
         for ciphertext_block in ciphertext.chunks(BLOCK_SIZE) {
             let count1 = crypter
                 .update(&ciphertext_block, &mut decrypted_buf)

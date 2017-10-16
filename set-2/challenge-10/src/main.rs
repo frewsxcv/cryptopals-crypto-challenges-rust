@@ -10,7 +10,7 @@ static SOLUTION_FILENAME: &str = "solution.txt";
 fn main() {
     let ciphertext =
         utils::read_base64_file(INPUT_FILENAME).expect("could not read base64 file");
-    let iv = &vec![0; utils::aes_128_cbc::BLOCK_SIZE][..];
+    let iv = &[0; utils::aes_128_cbc::BLOCK_SIZE][..];
     let cleartext = utils::aes_128_cbc::decrypt(&ciphertext, KEY, iv);
     assert_eq!(cleartext, solution());
 }
