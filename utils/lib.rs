@@ -144,8 +144,8 @@ pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
 pub mod aes_128_ecb {
     use openssl::symm;
 
-    pub fn encrypt(ciphertext: &[u8], key: &[u8]) -> Vec<u8> {
-        common(ciphertext, key, symm::Mode::Encrypt)
+    pub fn encrypt(plaintext: &[u8], key: &[u8]) -> Vec<u8> {
+        common(plaintext, key, symm::Mode::Encrypt)
     }
 
     pub fn decrypt(ciphertext: &[u8], key: &[u8]) -> Vec<u8> {
