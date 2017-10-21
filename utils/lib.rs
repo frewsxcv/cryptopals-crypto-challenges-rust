@@ -212,3 +212,20 @@ pub mod aes_128_cbc {
         plaintext
     }
 }
+
+pub mod pkcs7 {
+    pub fn pad(mut plaintext: Vec<u8>, block_len: usize) -> Vec<u8> {
+        let pad_len = block_len - (plaintext.len() % block_len);
+        let new_len = plaintext.len() + pad_len;
+        assert!(pad_len < 256);
+        plaintext.resize(new_len, pad_len as u8);
+        plaintext
+    }
+
+    pub fn unpad(mut plaintext: Vec<u8>) -> Vec<u8> {
+        let pad_len = plaintext[plaintext.len() - 1];
+        let new_len = plaintext.len() - pad_len as usize;
+        plaintext.truncate(new_len);
+        plaintext
+    }
+}
