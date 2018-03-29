@@ -10,15 +10,16 @@ fn main() {
     let input = HEXUPPER.decode(INPUT_HEX).unwrap();
     let mut input_xor = vec![0; input.len()];
     // (top score, key, shifted bytes as string)
-    let mut best = (0f32, 0u8, String::new());
-    for i in 0..255 {
+    let best = (0..=255).fold((0f32, 0u8, String::new()), |best, i| {
         input.xor_byte(i, &mut input_xor);
         let score = input_xor.english_score();
         if score > best.0 {
             let s = input_xor.ascii_to_string();
-            best = (score, i, s);
+            (score, i, s)
+        } else {
+            best
         }
-    }
+    });
     println!("key: '{}'", best.1 as char);
     println!("plaintext: {}", best.2);
 }
