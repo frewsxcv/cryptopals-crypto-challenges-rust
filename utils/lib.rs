@@ -1,7 +1,6 @@
 extern crate data_encoding;
 extern crate openssl;
 
-use std::ascii::AsciiExt;
 use std::error::Error;
 use std::io::Read;
 use std::fs::File;
