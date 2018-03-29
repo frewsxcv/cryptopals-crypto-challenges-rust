@@ -1,7 +1,7 @@
 extern crate data_encoding;
 extern crate utils;
 
-use data_encoding::hex;
+use data_encoding::HEXUPPER;
 use utils::BytesExt;
 
 const INPUT: &[u8] = b"Burning 'em, if you ain't quick and nimble\n\
@@ -14,6 +14,6 @@ const EXPECTED_HEX: &[u8] =
 fn main() {
     let mut result_xor = vec![0; INPUT.len()];
     INPUT.xor_repeating_key(&XOR_KEY, &mut result_xor);
-    let result_hex = hex::encode(&result_xor);
+    let result_hex = HEXUPPER.encode(&result_xor);
     assert_eq!(result_hex.as_bytes(), EXPECTED_HEX);
 }

@@ -1,13 +1,13 @@
 extern crate data_encoding;
 extern crate utils;
 
-use data_encoding::hex;
+use data_encoding::HEXUPPER;
 use utils::BytesExt;
 
 static INPUT_HEX: &[u8] = b"1B37373331363F78151B7F2B783431333D78397828372D363C78373E783A393B3736";
 
 fn main() {
-    let input = hex::decode(INPUT_HEX).unwrap();
+    let input = HEXUPPER.decode(INPUT_HEX).unwrap();
     let mut input_xor = vec![0; input.len()];
     // (top score, key, shifted bytes as string)
     let mut best = (0f32, 0u8, String::new());

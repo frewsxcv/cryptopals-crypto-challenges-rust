@@ -7,7 +7,7 @@ use std::io::Read;
 use std::fs::File;
 use std::path::Path;
 
-use data_encoding::{hex, base64};
+use data_encoding::{HEXUPPER, BASE64};
 
 // https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language
 fn byte_freq_score(c: u8) -> f32 {
@@ -114,7 +114,7 @@ pub fn read_base64_file<P: AsRef<Path>>(file_path: P) -> Result<Vec<u8>, Box<Err
         .into_iter()
         .filter(|i| !(*i as char).is_whitespace())
         .collect::<Vec<_>>();
-    Ok(base64::decode(&input_file_bytes)?)
+    Ok(BASE64.decode(&input_file_bytes)?)
 }
 
 pub fn read_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<String> {
@@ -135,7 +135,7 @@ pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
         .lines()
         .map(|str_| str_.as_bytes())
         .map(|bytes| bytes.to_ascii_uppercase())
-        .map(|bytes| hex::decode(&bytes).expect("encountered invalid hex"))
+        .map(|bytes| HEXUPPER.decode(&bytes).expect("encountered invalid hex"))
         .collect::<Vec<_>>()
 }
 
