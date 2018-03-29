@@ -38,9 +38,15 @@ fn encryption_oracle(plaintext: &[u8]) -> (Vec<u8>, Mode) {
     padded[prefix_len..prefix_len + plaintext.len()].copy_from_slice(&plaintext);
     rng.fill_bytes(&mut padded[prefix_len + plaintext.len()..]);
     if rng.gen_weighted_bool(2) {
-        (utils::aes_128_ecb::encrypt(&padded, &random_key()), Mode::Ecb)
+        (
+            utils::aes_128_ecb::encrypt(&padded, &random_key()),
+            Mode::Ecb,
+        )
     } else {
-        (utils::aes_128_cbc::encrypt(&padded, &random_key(), &rand::random::<Iv>()), Mode::Cbc)
+        (
+            utils::aes_128_cbc::encrypt(&padded, &random_key(), &rand::random::<Iv>()),
+            Mode::Cbc,
+        )
     }
 }
 

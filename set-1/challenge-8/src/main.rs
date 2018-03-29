@@ -1,6 +1,6 @@
 extern crate utils;
 
-use utils::{read_lines_from_file, read_hex_lines_from_file};
+use utils::{read_hex_lines_from_file, read_lines_from_file};
 use std::collections::HashMap;
 
 static INPUT_FILENAME: &str = "input.txt";

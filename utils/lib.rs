@@ -7,7 +7,7 @@ use std::io::Read;
 use std::fs::File;
 use std::path::Path;
 
-use data_encoding::{base64, hex};
+use data_encoding::{hex, base64};
 
 // https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language
 fn byte_freq_score(c: u8) -> f32 {
@@ -93,9 +93,9 @@ impl BytesExt for [u8] {
     }
 
     fn xor_repeating_key(&self, key: &[u8], dest: &mut [u8]) {
-        let xor_iter = self.iter().zip(key.iter().cycle()).map(|(input, key)| {
-            input ^ key
-        });
+        let xor_iter = self.iter()
+            .zip(key.iter().cycle())
+            .map(|(input, key)| input ^ key);
         for (i, xor) in xor_iter.enumerate() {
             dest[i] = xor;
         }
@@ -135,9 +135,7 @@ pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
         .lines()
         .map(|str_| str_.as_bytes())
         .map(|bytes| bytes.to_ascii_uppercase())
-        .map(|bytes| {
-            hex::decode(&bytes).expect("encountered invalid hex")
-        })
+        .map(|bytes| hex::decode(&bytes).expect("encountered invalid hex"))
         .collect::<Vec<_>>()
 }
 

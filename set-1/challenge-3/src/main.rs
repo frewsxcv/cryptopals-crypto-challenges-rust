@@ -6,7 +6,6 @@ use utils::BytesExt;
 
 static INPUT_HEX: &[u8] = b"1B37373331363F78151B7F2B783431333D78397828372D363C78373E783A393B3736";
 
-
 fn main() {
     let input = hex::decode(INPUT_HEX).unwrap();
     let mut input_xor = vec![0; input.len()];

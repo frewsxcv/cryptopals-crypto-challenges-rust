@@ -1,7 +1,6 @@
 extern crate utils;
 
-use utils::{BytesExt, read_hex_lines_from_file};
-
+use utils::{read_hex_lines_from_file, BytesExt};
 
 static INPUT_FILENAME: &str = "input.txt";
 
