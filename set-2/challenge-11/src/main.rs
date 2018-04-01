@@ -39,17 +39,13 @@ fn encryption_oracle(plaintext: &[u8]) -> (Vec<u8>, Mode) {
     rng.fill_bytes(&mut padded[prefix_len + plaintext.len()..]);
     if rng.gen_weighted_bool(2) {
         (
-            utils::aes_128_ecb::encrypt(&padded, &random_key()),
+            utils::aes_128_ecb::encrypt(&padded, &rand::random::<Key>()),
             Mode::Ecb,
         )
     } else {
         (
-            utils::aes_128_cbc::encrypt(&padded, &random_key(), &rand::random::<Iv>()),
+            utils::aes_128_cbc::encrypt(&padded, &rand::random::<Key>(), &rand::random::<Iv>()),
             Mode::Cbc,
         )
     }
-}
-
-fn random_key() -> Key {
-    rand::random::<Key>()
 }
