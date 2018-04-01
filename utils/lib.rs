@@ -6,7 +6,7 @@ use std::io::Read;
 use std::fs::File;
 use std::path::Path;
 
-use data_encoding::{HEXUPPER, BASE64};
+use data_encoding::{BASE64, HEXUPPER};
 
 // https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language
 fn byte_freq_score(c: u8) -> f32 {
