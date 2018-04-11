@@ -35,7 +35,7 @@ fn encryption_oracle(plaintext: &[u8]) -> (Vec<u8>, Mode) {
     let padded = vec![0; prefix_len + plaintext.len() + suffix_len];
     let mut padded = utils::pkcs7::pad(padded, BLOCK_SIZE);
     rng.fill_bytes(&mut padded[..prefix_len]);
-    padded[prefix_len..prefix_len + plaintext.len()].copy_from_slice(&plaintext);
+    padded[prefix_len..][..plaintext.len()].copy_from_slice(&plaintext);
     rng.fill_bytes(&mut padded[prefix_len + plaintext.len()..]);
     if rng.gen_weighted_bool(2) {
         (

@@ -140,7 +140,10 @@ pub fn read_hex_lines_from_file<P: AsRef<Path>>(file_path: P) -> Vec<Vec<u8>> {
 pub mod aes_128_ecb {
     use openssl::symm;
 
+    pub const BLOCK_SIZE: usize = 128 / 8;
+
     pub fn encrypt(plaintext: &[u8], key: &[u8]) -> Vec<u8> {
+        assert_eq!(plaintext.len() % BLOCK_SIZE, 0);
         common(plaintext, key, symm::Mode::Encrypt)
     }
 
@@ -168,6 +171,8 @@ pub mod aes_128_cbc {
     pub const BLOCK_SIZE: usize = 128 / 8;
 
     pub fn encrypt(plaintext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
+        assert_eq!(plaintext.len() % BLOCK_SIZE, 0);
+
         let cipher = symm::Cipher::aes_128_ecb();
         let mut crypter = symm::Crypter::new(cipher, symm::Mode::Encrypt, key, None).unwrap();
         crypter.pad(false);

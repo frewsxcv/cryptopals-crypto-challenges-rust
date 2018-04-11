@@ -1,0 +1,9 @@
+[package]
+name = "challenge-12"
+version = "0.1.0"
+authors = ["Corey Farwell <coreyf@rwell.org>"]
+
+[dependencies]
+data-encoding = "2"
+lazy_static = "1"
+utils = {"path" = "../../utils"}
