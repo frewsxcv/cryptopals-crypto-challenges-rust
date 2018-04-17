@@ -1,15 +1,17 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-type Profile = HashMap<String, String>;
+type Profile = BTreeMap<String, String>;
 
 fn main() {
-    let profile1 = parse("foo=bar&baz=qux&zap=zazzle");
-    println!("{:?}", profile1);
+    let profile1 = decode("foo=bar&baz=qux&zap=zazzle");
+
     let profile2 = profile_for("foo@bar.com");
-    println!("{:?}", profile2);
+
+    assert_eq!("baz=qux&foo=bar&zap=zazzle", encode(&profile1));
+    assert_eq!("email=foo@bar.com&role=user&uid=10", encode(&profile2));
 }
 
-fn parse(input: &str) -> Profile {
+fn decode(input: &str) -> Profile {
     input
         .split('&')
         .map(|pair| {
@@ -21,8 +23,22 @@ fn parse(input: &str) -> Profile {
         .collect()
 }
 
+fn encode(profile: &Profile) -> String {
+    profile
+        .iter()
+        .map(|(k, v)| {
+            format!(
+                "{}={}",
+                k.replace("&", "").replace("=", ""),
+                v.replace("&", "").replace("=", ""),
+            )
+        })
+        .collect::<Vec<_>>()
+        .join("&")
+}
+
 fn profile_for(email: &str) -> Profile {
-    let mut map = HashMap::new();
+    let mut map = Profile::new();
     map.insert("email".to_string(), email.to_string());
     map.insert("uid".to_string(), "10".to_string());
     map.insert("role".to_string(), "user".to_string());
