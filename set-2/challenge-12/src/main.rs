@@ -51,18 +51,18 @@ fn part_2() {
 fn part_3() { }
 
 fn part_4() {
-    let prefix = b"AAAAAAAAAAAAAAA"; // 'A' × 15
+    let prefix = [b'A'; 15];
 
-    let ciphertext = encryption_oracle(prefix);
+    let ciphertext = encryption_oracle(&prefix[..]);
     let ciphertext_first_block = &ciphertext[..aes_128_ecb::BLOCK_SIZE];
 
-    let lookup = build_lookup(prefix);
+    let lookup = build_lookup(&prefix);
 
     assert_eq!(b'R', lookup[ciphertext_first_block]);
 }
 
 fn part_5() {
-    let mut prefix = b"AAAAAAAAAAAAAA".to_vec(); // 'A' × 14
+    let mut prefix = vec![b'A'; 14];
 
     let ciphertext = encryption_oracle(&prefix);
     let ciphertext_first_block = &ciphertext[..aes_128_ecb::BLOCK_SIZE];
