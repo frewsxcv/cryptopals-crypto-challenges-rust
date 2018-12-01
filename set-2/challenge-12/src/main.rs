@@ -7,7 +7,7 @@ use data_encoding::BASE64;
 use std::collections::HashMap;
 use utils::aes_128_ecb;
 
-const KEY: [u8; 16] = *b"58ss8aospoaisjef";
+const KEY: aes_128_ecb::Key = *b"58ss8aospoaisjef";
 
 lazy_static! {
     static ref PLAINTEXT_SUFFIX: Vec<u8> = BASE64
