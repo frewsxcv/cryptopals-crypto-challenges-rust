@@ -4,7 +4,7 @@ extern crate utils;
 use rand::Rng;
 use std::iter;
 
-use utils::aes_128_ecb;
+use utils::{aes_128_cbc, aes_128_ecb};
 
 type Iv = [u8; 16];
 
