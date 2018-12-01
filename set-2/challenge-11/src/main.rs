@@ -2,7 +2,6 @@ extern crate rand;
 extern crate utils;
 
 use rand::Rng;
-use std::iter;
 
 use utils::{aes_128_cbc, aes_128_ecb};
 
@@ -17,7 +16,7 @@ enum Mode {
 }
 
 fn main() {
-    let plaintext = iter::repeat(b'a').take(BLOCK_SIZE * 4).collect::<Vec<_>>();
+    let plaintext = vec![b'a'; BLOCK_SIZE * 4];
     let (ciphertext, mode) = encryption_oracle(&plaintext[..]);
     let second_block = &ciphertext[BLOCK_SIZE..(BLOCK_SIZE * 2)];
     let third_block = &ciphertext[(BLOCK_SIZE * 2)..(BLOCK_SIZE * 3)];
