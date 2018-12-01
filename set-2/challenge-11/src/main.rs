@@ -4,7 +4,8 @@ extern crate utils;
 use rand::Rng;
 use std::iter;
 
-type Key = [u8; 16];
+use utils::{aes_128_cbc, aes_128_ecb};
+
 type Iv = [u8; 16];
 
 const BLOCK_SIZE: usize = 16;
@@ -39,12 +40,16 @@ fn encryption_oracle(plaintext: &[u8]) -> (Vec<u8>, Mode) {
     rng.fill_bytes(&mut padded[prefix_len + plaintext.len()..]);
     if rng.gen_weighted_bool(2) {
         (
-            utils::aes_128_ecb::encrypt(&padded, &rand::random::<Key>()),
+            aes_128_ecb::encrypt(&padded, &rand::random::<aes_128_ecb::Key>()),
             Mode::Ecb,
         )
     } else {
         (
-            utils::aes_128_cbc::encrypt(&padded, &rand::random::<Key>(), &rand::random::<Iv>()),
+            aes_128_cbc::encrypt(
+                &padded,
+                &rand::random::<aes_128_ecb::Key>(),
+                &rand::random::<Iv>()
+            ),
             Mode::Cbc,
         )
     }

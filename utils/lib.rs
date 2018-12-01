@@ -141,6 +141,9 @@ pub mod aes_128_ecb {
     use openssl::symm;
 
     pub const BLOCK_SIZE: usize = 128 / 8;
+    pub const KEY_SIZE: usize = 16;
+
+    pub type Key = [u8; 16];
 
     pub fn encrypt(plaintext: &[u8], key: &[u8]) -> Vec<u8> {
         assert_eq!(plaintext.len() % BLOCK_SIZE, 0);
